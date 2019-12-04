@@ -11,14 +11,13 @@ import endpoints.algebra
   * User: Roland RECKEL
   * Date: Dec  4, 2019
   * Time: 11:45:16
+  * 
+  * Collection of all the Api's, if we want to create a client for the
+  * whole Api
+  * TODO: Shoukd be moved to the shared module, along with the other Api traits
   */
-trait Api extends algebra.Endpoints with algebra.circe.JsonEntitiesFromCodec {
-
-  val basePath = path / "api" / "v1"
-
-  // Api endpoint
-  val hello = endpoint(get(basePath / "hello"), jsonResponse[String]())
-
-  // z-Pages
-  val healthz = endpoint(get(path / "healthz"), jsonResponse[String]())
-}
+trait Api
+    extends algebra.Endpoints
+    with algebra.circe.JsonEntitiesFromCodec
+    with ZPagesApi
+    with DemoApi

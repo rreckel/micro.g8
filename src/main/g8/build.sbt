@@ -64,7 +64,8 @@ lazy val $name$ = (project in file(".")).
       "com.github.pureconfig" %% "pureconfig"                     % "0.9.1",
 
       // Logging
-      "org.slf4j"              % "slf4j-api"                      % "1.7.25",
+      "io.chrisdavenport"     %% "log4cats-slf4j"                 % "1.0.1",
+      "org.slf4j"              % "slf4j-api"                      % "1.7.29",
       "ch.qos.logback"         % "logback-classic"                % "1.2.3",
 
       // Testing
