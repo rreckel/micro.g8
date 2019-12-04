@@ -1,4 +1,18 @@
-A [Giter8][g8] template for a minimalistic micro service
+
+Summary
+-------
+A [Giter8][g8] template for VDL micro services
+
+```
+sbt new rreckel/micro.g8 --branch base
+sbt run
+```
+
+Branches
+--------
+
+* base - Base project. Just prints "Hello World"
+
 
 Template license
 ----------------
