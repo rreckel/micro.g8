@@ -12,8 +12,7 @@ import endpoints.algebra
   * Date: Dec  4, 2019
   * Time: 11:45:16
   */
-
-trait Api extends algebra.Endpoints with algebra.circe.JsonEntitiesFromCodec { 
+trait Api extends algebra.Endpoints with algebra.circe.JsonEntitiesFromCodec {
 
   val basePath = path / "api" / "v1"
 
