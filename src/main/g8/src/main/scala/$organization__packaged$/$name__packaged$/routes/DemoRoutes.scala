@@ -35,6 +35,7 @@ object DemoRoutes
     _ <- env.logger.debug("Creating DemoRoutes").to[F]
   } yield {
     hello.implementedByProgram(env) {_ => demoPrograms.sayHello() } ~
-    explode.implementedByProgram(env) {_ => demoPrograms.explode() }    
+    explode.implementedByProgram(env) {_ => demoPrograms.explode() } ~
+    exception.implementedByProgram(env) {_ => demoPrograms.exception() }
   }
 }

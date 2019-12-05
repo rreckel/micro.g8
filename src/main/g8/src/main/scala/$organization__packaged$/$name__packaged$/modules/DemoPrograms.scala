@@ -22,6 +22,7 @@ trait DemoPrograms[F[_]] {
 
   def sayHello(): F[String]
   def explode(): F[Unit]
+  def exception(): F[Unit]
 }
 
 object DemoPrograms {
@@ -36,5 +37,7 @@ object DemoPrograms {
 
     case object Boom extends DomainException("The service failed.")
     override def explode() = DomainError[F].raiseError(Boom)
+
+    override def exception() = throw new RuntimeException("An exception is thrown")
   }
 }

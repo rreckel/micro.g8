@@ -25,4 +25,5 @@ trait DemoApi
   // Api endpoint
   val hello = endpoint(get(basePath / "hello"), jsonResponse[ApiResponse[String]]())
   val explode = endpoint(get(basePath / "explode"), jsonResponse[ApiResponse[Unit]]())
+  val exception = endpoint(get(basePath / "exception"), jsonResponse[ApiResponse[Unit]]())
 }
