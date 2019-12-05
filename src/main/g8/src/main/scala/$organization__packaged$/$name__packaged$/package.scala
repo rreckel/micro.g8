@@ -23,6 +23,7 @@ import cats.effect._
 import io.circe.syntax._
 import io.circe.generic.auto._
 
+import org.slf4j.LoggerFactory
 import io.chrisdavenport.log4cats.Logger
 
 /**
@@ -67,21 +68,28 @@ package object $name$ {
     def runWithEnv(env: Environment): A = fa.run(env).unsafeRunSync()
   }
 
-  implicit class ApiErrorHandler[F[_]: Monad: DomainError, A](fa: F[A]) {
+  implicit class ApiErrorHandler[F[_]: Monad: DomainError: LiftIO, A](fa: F[A]) {
 
     /** 
       * Extract the ApiResponse of the 'F' type. All we do is handle the ApiError and wrap into ApiResponse
       */
-    def toApiResponse(): F[ApiResponse[A]] = fa.map[ApiResponse[A]](a => ApiSuccess(a)).recover{case e: DomainException => ApiFailure(api.DomainError(e.msg, causeList(e), getStackTraceAsString(e)))}.handleError(e => ApiFailure(SystemError(e.getMessage(), causeList(e), getStackTraceAsString(e))))
+    def toApiResponse(): F[ApiResponse[A]] = fa.map[ApiResponse[A]](a => ApiSuccess(a)).recover{case e: DomainException => ApiFailure(api.DomainError(e.msg, causeList(e), getStackTraceAsString(e)))}.handleErrorWith(e => createSystemError[F](e).map[ApiResponse[A]](identity))
   }
 
   object AkkaExceptionHandler {
     implicit def exceptionHandler = ExceptionHandler {
-      case e => complete(StatusCodes.InternalServerError, createSystemError(e))
+      case e => complete(StatusCodes.InternalServerError, unsafeCreateSystemErrorAsString(e))
     }
   }
 
-  private def createSystemError(e: Throwable) = ApiFailure(SystemError(e.getMessage(), causeList(e), getStackTraceAsString(e))).asJson.noSpaces
+  private def createSystemError[F[_]: DomainError: LiftIO](e: Throwable): F[ApiFailure] = for {
+    logger <- IO(LoggerFactory.getLogger("SystemError")).to[F]
+    _ <- IO(logger.error("A SystemError was encountered", e)).to[F]
+    f <- IO(ApiFailure(SystemError(e.getMessage(), causeList(e), getStackTraceAsString(e)))).to[F]
+  } yield f
+
+
+  private def unsafeCreateSystemErrorAsString(e: Throwable): String = createSystemError[IO](e).unsafeRunSync.asJson.noSpaces
 
   private def causeList(e: Throwable): List[String] = {
     def secureMessage(s: String) = Option(s).getOrElse("N/A")
