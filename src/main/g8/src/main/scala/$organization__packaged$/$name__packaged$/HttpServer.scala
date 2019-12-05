@@ -43,6 +43,7 @@ object HttpServer extends IOApp {
     */
   def server[F[_]: LiftIO](routes: Route) = IO.fromFuture {
     IO {
+      import AkkaExceptionHandler._
       Http().bindAndHandle(routes, "0.0.0.0", 8080)
     } *> IO.never
   }.as(ExitCode.Success).to[F]

@@ -9,11 +9,19 @@ import $organization$.$name$.api.{ApiResponse, ApiSuccess, ApiFailure, SystemErr
 import java.io.PrintWriter
 import java.io.StringWriter
 
+import akka.http.scaladsl.server.ExceptionHandler
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.headers._
+
 import cats._
 import cats.data._
 import cats.implicits._
 
 import cats.effect._
+
+import io.circe.syntax._
+import io.circe.generic.auto._
 
 import io.chrisdavenport.log4cats.Logger
 
@@ -65,20 +73,28 @@ package object $name$ {
       * Extract the ApiResponse of the 'F' type. All we do is handle the ApiError and wrap into ApiResponse
       */
     def toApiResponse(): F[ApiResponse[A]] = fa.map[ApiResponse[A]](a => ApiSuccess(a)).recover{case e: DomainException => ApiFailure(api.DomainError(e.msg, causeList(e), getStackTraceAsString(e)))}.handleError(e => ApiFailure(SystemError(e.getMessage(), causeList(e), getStackTraceAsString(e))))
+  }
 
-    private def causeList(e: Throwable): List[String] = {
-      def secureMessage(s: String) = Option(s).getOrElse("N/A")
-      Option(e.getCause) match {
-        case Some(c) => secureMessage(e.getMessage) :: causeList(c)
-        case None => secureMessage(e.getMessage) :: Nil
-      }
+  object AkkaExceptionHandler {
+    implicit def exceptionHandler = ExceptionHandler {
+      case e => complete(StatusCodes.InternalServerError, createSystemError(e))
     }
+  }
 
-    private def getStackTraceAsString(t: Throwable) = {
-      val sw = new StringWriter
-      t.printStackTrace(new PrintWriter(sw))
-      sw.toString
+  private def createSystemError(e: Throwable) = ApiFailure(SystemError(e.getMessage(), causeList(e), getStackTraceAsString(e))).asJson.noSpaces
+
+  private def causeList(e: Throwable): List[String] = {
+    def secureMessage(s: String) = Option(s).getOrElse("N/A")
+    Option(e.getCause) match {
+      case Some(c) => secureMessage(e.getMessage) :: causeList(c)
+      case None => secureMessage(e.getMessage) :: Nil
     }
+  }
+
+  private def getStackTraceAsString(t: Throwable) = {
+    val sw = new StringWriter
+    t.printStackTrace(new PrintWriter(sw))
+    sw.toString
   }
 
 }
