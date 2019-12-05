@@ -4,7 +4,7 @@
 
 package $organization$
 
-import $organization$.$name$.api.{ApiResponse, ApiSuccess, ApiFailure, DomainError, SystemError}
+import $organization$.$name$.api.{ApiResponse, ApiSuccess, ApiFailure, SystemError}
 
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -41,6 +41,9 @@ package $name$ {
 package object $name$ {
 
   type DomainError[F[_]] = MonadError[F, Throwable]
+  object DomainError {
+    def apply[F[_]](implicit F: DomainError[F]): DomainError[F] = F
+  }
 
   /**
     * This is the effect used by the different modules
@@ -61,7 +64,7 @@ package object $name$ {
     /** 
       * Extract the ApiResponse of the 'F' type. All we do is handle the ApiError and wrap into ApiResponse
       */
-    def toApiResponse(): F[ApiResponse[A]] = fa.map[ApiResponse[A]](a => ApiSuccess(a)).recover{case e: DomainException => ApiFailure(DomainError(e.msg, causeList(e), getStackTraceAsString(e)))}.handleError(e => ApiFailure(SystemError(e.getMessage(), causeList(e), getStackTraceAsString(e))))
+    def toApiResponse(): F[ApiResponse[A]] = fa.map[ApiResponse[A]](a => ApiSuccess(a)).recover{case e: DomainException => ApiFailure(api.DomainError(e.msg, causeList(e), getStackTraceAsString(e)))}.handleError(e => ApiFailure(SystemError(e.getMessage(), causeList(e), getStackTraceAsString(e))))
 
     private def causeList(e: Throwable): List[String] = {
       def secureMessage(s: String) = Option(s).getOrElse("N/A")

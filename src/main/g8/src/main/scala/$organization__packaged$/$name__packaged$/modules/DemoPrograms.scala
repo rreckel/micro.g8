@@ -21,16 +21,20 @@ import cats.mtl._
 trait DemoPrograms[F[_]] {
 
   def sayHello(): F[String]
+  def explode(): F[Unit]
 }
 
 object DemoPrograms {
 
-  def demoPrograms[F[_]: Monad: LiftIO](implicit A: ApplicativeAsk[F, Environment]) = new DemoPrograms[F] {
+  def demoPrograms[F[_]: Monad: DomainError: LiftIO](implicit A: ApplicativeAsk[F, Environment]) = new DemoPrograms[F] {
     override def sayHello() = for {
       env <- A.ask
       _ <- env.logger.debug("Executing sayHello program").to[F]
     } yield {
       "Hello World"
     }
+
+    case object Boom extends DomainException("The service failed.")
+    override def explode() = DomainError[F].raiseError(Boom)
   }
 }

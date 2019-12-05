@@ -21,7 +21,6 @@ import cats.mtl._
 import cats.mtl.implicits._
 
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
-import io.chrisdavenport.log4cats.Logger
 
 /**
   * Created by Emacs.

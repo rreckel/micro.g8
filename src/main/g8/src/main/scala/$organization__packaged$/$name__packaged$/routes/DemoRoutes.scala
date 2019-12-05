@@ -8,6 +8,7 @@ package routes
 import $organization$.$name$.api.DemoApi
 import $organization$.$name$.modules.DemoPrograms
 
+import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 
 import cats._
@@ -26,14 +27,14 @@ import cats.effect._
 object DemoRoutes
     extends DemoApi
     with endpoints.akkahttp.server.Endpoints
-    with endpoints.akkahttp.server.JsonEntitiesFromCodec {
+    with endpoints.akkahttp.server.JsonEntitiesFromCodec
+    with EndpointUtils {
 
   def routes[F[_]: Monad: LiftIO](demoPrograms: DemoPrograms[DomainEffect])(implicit A: ApplicativeAsk[F, Environment]): F[Route] = for {
     env <- A.ask
     _ <- env.logger.debug("Creating DemoRoutes").to[F]
   } yield {
-    hello.implementedBy {_ => demoPrograms.sayHello.toApiResponse.runWithEnv(env)
-    }
+    hello.implementedByProgram(env) {_ => demoPrograms.sayHello() } ~
+    explode.implementedByProgram(env) {_ => demoPrograms.explode() }    
   }
 }
-
