@@ -12,7 +12,8 @@ Branches
 --------
 
 * base - Base project. Just prints "Hello World"
-
+* server - This branch uses an Akka Http server with endpoints
+* tagless_server - This branch is based on the 'server' branch, but uses final tagless endcoding. It also includes logging and error handling 
 
 Template license
 ----------------
