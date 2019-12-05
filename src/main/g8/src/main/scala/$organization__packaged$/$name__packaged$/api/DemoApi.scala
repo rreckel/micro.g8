@@ -3,19 +3,26 @@
  */
 
 package $organization$.$name$
+package api
 
 import endpoints.algebra
+
+import io.circe.generic.auto._
 
 /**
   * Created by Emacs.
   * User: Roland RECKEL
   * Date: Dec  4, 2019
-  * Time: 17:03:25
+  * Time: 17:10:50
   */
 
-trait ZPagesApi
+trait DemoApi
     extends algebra.Endpoints
     with algebra.circe.JsonEntitiesFromCodec {
 
-  val healthz = endpoint(get(path / "healthz"), jsonResponse[String]())
+  val basePath = path / "api" / "v1"
+
+  // Api endpoint
+  val hello = endpoint(get(basePath / "hello"), jsonResponse[ApiResponse[String]]())
+
 }

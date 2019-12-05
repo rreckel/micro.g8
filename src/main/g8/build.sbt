@@ -55,7 +55,8 @@ lazy val $name$ = (project in file(".")).
       "org.typelevel"         %% "cats-free"                      % "2.0.0",
       "org.typelevel"         %% "alleycats-core"                 % "2.0.0",
       "org.typelevel"         %% "cats-effect"                    % "2.0.0",
-
+      "org.typelevel"         %% "cats-mtl-core"                  % "0.7.0",
+      
       "io.circe"              %% "circe-core"                     % "0.12.3",
       "io.circe"              %% "circe-generic"                  % "0.12.3",
       "io.circe"              %% "circe-parser"                   % "0.12.3",

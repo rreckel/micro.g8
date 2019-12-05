@@ -3,24 +3,23 @@
  */
 
 package $organization$.$name$
+package routes
 
-import akka.http.scaladsl.server.Directives._
+import $organization$.$name$.api.ZPagesApi
 
 /**
   * Created by Emacs.
   * User: Roland RECKEL
   * Date: Dec  4, 2019
-  * Time: 11:53:21
-  * 
-  * The Akka server routes are defined here
+  * Time: 17:00:57
   */
-object ApiRoutes
-    extends Api
+
+object ZPagesRoutes
+    extends ZPagesApi
     with endpoints.akkahttp.server.Endpoints
     with endpoints.akkahttp.server.JsonEntitiesFromCodec {
 
   def routes = {
-    DemoRoutes.routes ~
-    ZPagesRoutes.routes
+    healthz.implementedBy(_ => "OK")
   }
 }

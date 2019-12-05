@@ -3,6 +3,7 @@
  */
 
 package $organization$.$name$
+package api
 
 import endpoints.algebra
 
@@ -21,3 +22,15 @@ trait Api
     with algebra.circe.JsonEntitiesFromCodec
     with ZPagesApi
     with DemoApi
+
+sealed trait ApiError {
+  def msg: String
+  def cause: List[String]
+  def stacktrace: String
+}
+case class DomainError(msg: String, cause: List[String], stacktrace: String) extends ApiError
+case class SystemError(msg: String, cause: List[String], stacktrace: String) extends ApiError
+
+sealed trait ApiResponse[+T]
+case class ApiSuccess[T](result: T) extends ApiResponse[T]
+case class ApiFailure(failure: ApiError) extends ApiResponse[Nothing]
