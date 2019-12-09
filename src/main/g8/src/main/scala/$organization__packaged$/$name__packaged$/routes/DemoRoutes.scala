@@ -41,8 +41,7 @@ object DemoRoutes
   }
 
   private def runWith$name;format="cap"$User[F[_]: Monad: LiftIO, B](token: String)(f: => F[B])(implicit A: ApplicativeLocal[F, Environment], ME: MonadError[F, Throwable]): F[B] = {
-    //runWithAuthentication[F, B]("$name;format="upper"$_USER")(token)(f)
-    runWithAuthentication[F, B]("DUTY_USER")(token)(f)
+    runWithAuthentication[F, B]("$name;format="upper"$_USER")(token)(f)
   }
 
 }
