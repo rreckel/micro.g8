@@ -22,8 +22,10 @@ trait DemoApi
 
   val basePath = path / "api" / "v1"
 
+  val authorizationHeader = header("Authorization", Some("Bearer authorization header filled with the JWT token"))
+
   // Api endpoint
-  val hello = endpoint(get(basePath / "hello"), jsonResponse[ApiResponse[String]]())
+  val hello = endpoint(get(basePath / "hello", authorizationHeader), jsonResponse[ApiResponse[String]]())
   val explode = endpoint(get(basePath / "explode"), jsonResponse[ApiResponse[Unit]]())
   val exception = endpoint(get(basePath / "exception"), jsonResponse[ApiResponse[Unit]]())
 }

@@ -57,8 +57,10 @@ object HttpServer extends IOApp {
     type RoutesEffect[T] = ReaderT[IO, Environment, T]
 
     for {
+      config <- $name$Config
+      keymakerPublicKey <- keymakerPublicKeyFromPath(config.publicKeyPath)
       logger <- Slf4jLogger.create[IO]
-      env = Environment(logger)
+      env = Environment(config, AuthConfig(keymakerPublicKey), logger)
       routes <- ApiRoutes.routes[RoutesEffect].run(env)
       s <- server[IO](routes)
     } yield s    

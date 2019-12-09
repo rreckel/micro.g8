@@ -30,9 +30,10 @@ object DemoPrograms {
   def demoPrograms[F[_]: Monad: DomainError: LiftIO](implicit A: ApplicativeAsk[F, Environment]) = new DemoPrograms[F] {
     override def sayHello() = for {
       env <- A.ask
+      username = env.authConfig.claim.map(_.username)
       _ <- env.logger.debug("Executing sayHello program").to[F]
     } yield {
-      "Hello World"
+      s"Hello World \${username.getOrElse("Username not found...?")}"
     }
 
     case object Boom extends DomainException("The service failed.")

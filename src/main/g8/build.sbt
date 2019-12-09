@@ -49,6 +49,7 @@ lazy val $name$ = (project in file(".")).
       "de.heikoseeberger"     %% "akka-http-circe"                % "1.20.1",
       "org.julienrf"          %% "endpoints-akka-http-server"     % "0.9.0",
       "org.julienrf"          %% "endpoints-akka-http-client"     % "0.9.0",
+      "lu.vdl"                %% "keymakerlibrary"                % "1.0.5-SNAPSHOT",
 
       // Cats & Circe
       "org.typelevel"         %% "cats-core"                      % "2.0.0",
@@ -62,7 +63,7 @@ lazy val $name$ = (project in file(".")).
       "io.circe"              %% "circe-parser"                   % "0.12.3",
 
       // Config loading
-      "com.github.pureconfig" %% "pureconfig"                     % "0.9.1",
+      "com.github.pureconfig" %% "pureconfig"                     % "0.10.2",
 
       // Logging
       "io.chrisdavenport"     %% "log4cats-slf4j"                 % "1.0.1",

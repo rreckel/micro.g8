@@ -28,14 +28,21 @@ object DemoRoutes
     extends DemoApi
     with endpoints.akkahttp.server.Endpoints
     with endpoints.akkahttp.server.JsonEntitiesFromCodec
-    with EndpointUtils {
+    with EndpointUtils
+    with auth.AuthUtils {
 
   def routes[F[_]: Monad: LiftIO](demoPrograms: DemoPrograms[DomainEffect])(implicit A: ApplicativeAsk[F, Environment]): F[Route] = for {
     env <- A.ask
     _ <- env.logger.debug("Creating DemoRoutes").to[F]
   } yield {
-    hello.implementedByProgram(env) {_ => demoPrograms.sayHello() } ~
+    hello.implementedByProgram(env) { token => runWith$name;format="cap"$User(token){ demoPrograms.sayHello() }} ~
     explode.implementedByProgram(env) {_ => demoPrograms.explode() } ~
     exception.implementedByProgram(env) {_ => demoPrograms.exception() }
   }
+
+  private def runWith$name;format="cap"$User[F[_]: Monad: LiftIO, B](token: String)(f: => F[B])(implicit A: ApplicativeLocal[F, Environment], ME: MonadError[F, Throwable]): F[B] = {
+    //runWithAuthentication[F, B]("$name;format="upper"$_USER")(token)(f)
+    runWithAuthentication[F, B]("DUTY_USER")(token)(f)
+  }
+
 }
