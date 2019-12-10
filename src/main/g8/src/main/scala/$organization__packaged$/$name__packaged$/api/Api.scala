@@ -21,7 +21,7 @@ trait Api
     extends algebra.Endpoints
     with algebra.circe.JsonEntitiesFromCodec
     with ZPagesApi
-    with DemoApi
+    with $name;format="Camel"$Api
 
 sealed trait ApiError {
   def msg: String

@@ -13,11 +13,9 @@ import akka.stream.ActorMaterializer
 
 import scala.concurrent.ExecutionContext
 
-import cats._
 import cats.data._
 import cats.implicits._
 import cats.effect._
-import cats.mtl._
 import cats.mtl.implicits._
 
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger

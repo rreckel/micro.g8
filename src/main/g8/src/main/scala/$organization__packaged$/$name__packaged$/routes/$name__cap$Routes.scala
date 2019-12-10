@@ -5,8 +5,8 @@
 package $organization$.$name$
 package routes
 
-import $organization$.$name$.api.DemoApi
-import $organization$.$name$.modules.DemoPrograms
+import $organization$.$name$.api.$name;format="Camel"$Api
+import $organization$.$name$.modules.$name;format="Camel"$Programs
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
@@ -24,20 +24,20 @@ import cats.effect._
   * Time: 16:59:43
   */
 
-object DemoRoutes
-    extends DemoApi
+object $name;format="cap"$Routes
+    extends $name;format="Camel"$Api
     with endpoints.akkahttp.server.Endpoints
     with endpoints.akkahttp.server.JsonEntitiesFromCodec
     with EndpointUtils
     with auth.AuthUtils {
 
-  def routes[F[_]: Monad: LiftIO](demoPrograms: DemoPrograms[DomainEffect])(implicit A: ApplicativeAsk[F, Environment]): F[Route] = for {
+  def routes[F[_]: Monad: LiftIO]($name;format="camel"$Programs: $name;format="Camel"$Programs[DomainEffect])(implicit A: ApplicativeAsk[F, Environment]): F[Route] = for {
     env <- A.ask
-    _ <- env.logger.debug("Creating DemoRoutes").to[F]
+    _ <- env.logger.debug("Creating $name;format="camel"$Routes").to[F]
   } yield {
-    hello.implementedByProgram(env) { token => runWith$name;format="cap"$User(token){ demoPrograms.sayHello() }} ~
-    explode.implementedByProgram(env) {_ => demoPrograms.explode() } ~
-    exception.implementedByProgram(env) {_ => demoPrograms.exception() }
+    hello.implementedByProgram(env) { token => runWith$name;format="Camel"$User(token){ $name;format="camel"$Programs.sayHello() }} ~
+    explode.implementedByProgram(env) {_ => $name;format="camel"$Programs.explode() } ~
+    exception.implementedByProgram(env) {_ => $name;format="camel"$Programs.exception() }
   }
 
   private def runWith$name;format="cap"$User[F[_]: Monad: LiftIO, B](token: String)(f: => F[B])(implicit A: ApplicativeLocal[F, Environment], ME: MonadError[F, Throwable]): F[B] = {

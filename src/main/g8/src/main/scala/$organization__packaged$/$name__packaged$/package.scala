@@ -16,7 +16,6 @@ import scala.io.Source
 import akka.http.scaladsl.server.ExceptionHandler
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.model.headers._
 
 import cats._
 import cats.data._
@@ -112,7 +111,7 @@ package object $name$ {
     */
   object AkkaExceptionHandler {
     implicit def exceptionHandler = ExceptionHandler {
-      case e => complete(StatusCodes.InternalServerError, unsafeCreateSystemErrorAsString(e))
+      case e => complete((StatusCodes.InternalServerError, unsafeCreateSystemErrorAsString(e)))
     }
   }
 

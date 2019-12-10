@@ -6,7 +6,7 @@ package $organization$.$name$
 package routes
 
 import $organization$.$name$.api.Api
-import $organization$.$name$.modules.DemoPrograms
+import $organization$.$name$.modules.$name;format="Camel"$Programs
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
@@ -30,12 +30,12 @@ object ApiRoutes
     with endpoints.akkahttp.server.Endpoints
     with endpoints.akkahttp.server.JsonEntitiesFromCodec {
 
-  val demoPrograms = DemoPrograms.demoPrograms[DomainEffect]
+  val $name;format="camel"$Programs = $name;format="Camel"$Programs.$name;format="camel"$Programs[DomainEffect]
 
   def routes[F[_]: Monad: LiftIO](implicit A: ApplicativeAsk[F, Environment]): F[Route]  = for {
-    demoRoutes <- DemoRoutes.routes[F](demoPrograms)
+    $name;format="camel"$Routes <- $name;format="Camel"$Routes.routes[F]($name;format="camel"$Programs)
   } yield {
-    demoRoutes ~
+    $name;format="camel"$Routes ~
     ZPagesRoutes.routes
   }
 }

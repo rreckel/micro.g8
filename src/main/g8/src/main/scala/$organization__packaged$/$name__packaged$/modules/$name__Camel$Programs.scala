@@ -18,16 +18,17 @@ import cats.mtl._
   * Time: 10:07:45
   */
 
-trait DemoPrograms[F[_]] {
+trait $name;format="Camel"$Programs[F[_]] {
 
   def sayHello(): F[String]
   def explode(): F[Unit]
   def exception(): F[Unit]
 }
 
-object DemoPrograms {
+object $name;format="Camel"$Programs {
 
-  def demoPrograms[F[_]: Monad: DomainError: LiftIO](implicit A: ApplicativeAsk[F, Environment]) = new DemoPrograms[F] {
+  def $name;format="camel"$Programs[F[_]: Monad: DomainError: LiftIO](implicit A: ApplicativeAsk[F, Environment]) = new $name;format="Camel"$Programs[F] {
+
     override def sayHello() = for {
       env <- A.ask
       username = env.authConfig.claim.map(_.username)

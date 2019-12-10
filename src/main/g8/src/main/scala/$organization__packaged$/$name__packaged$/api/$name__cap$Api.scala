@@ -16,7 +16,7 @@ import io.circe.generic.auto._
   * Time: 17:10:50
   */
 
-trait DemoApi
+trait $name;format="cap"$Api
     extends algebra.Endpoints
     with algebra.circe.JsonEntitiesFromCodec {
 
