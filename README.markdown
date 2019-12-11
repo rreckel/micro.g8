@@ -5,6 +5,14 @@ A [Giter8][g8] template for VDL micro services
 
 ```
 sbt new rreckel/micro.g8 --branch base
+```
+or
+```
+sbt new ssh://stash@stash.ville.vdl.lu:7999/g8/micro.g8.git --branch base
+```
+replacing 'stash' with your username,  
+and then run:
+```
 sbt run
 ```
 
