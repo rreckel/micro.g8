@@ -122,7 +122,7 @@ package object $name$ {
   } yield f
 
 
-  private def unsafeCreateSystemErrorAsString(e: Throwable): String = createSystemError[IO](e).unsafeRunSync.asJson.noSpaces
+  private def unsafeCreateSystemErrorAsString(e: Throwable): String = createSystemError[IO](e).map[ApiResponse[Unit]](identity).unsafeRunSync.asJson.noSpaces
 
   private def causeList(e: Throwable): List[String] = {
     def secureMessage(s: String) = Option(s).getOrElse("N/A")
